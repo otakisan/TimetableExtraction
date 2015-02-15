@@ -165,34 +165,72 @@ namespace TimetableExtractionApp.Extractors
         private string GetDestinationMappingValue(Dictionary<string, Dictionary<string, string>> nameMappings, string keyValue)
         {
             string mappedValue = keyValue;
-            string adujestedKeyValue = string.IsNullOrWhiteSpace(keyValue) ? "無印" : keyValue;
-            if (nameMappings.ContainsKey("dist") && nameMappings["dist"].ContainsKey(adujestedKeyValue))
+
+            var keyStrings = keyValue.Split('・');
+            var builder = new StringBuilder();
+            foreach (var keyString in keyStrings)
             {
-                mappedValue = nameMappings["dist"][adujestedKeyValue];
+                string adujestedKeyValue = string.IsNullOrWhiteSpace(keyString) ? "無印" : keyString;
+                if (nameMappings.ContainsKey("dist") && nameMappings["dist"].ContainsKey(adujestedKeyValue))
+                {
+                    mappedValue = nameMappings["dist"][adujestedKeyValue];
+                }
+
+                builder.Append(mappedValue).Append("・");
             }
 
-            return mappedValue;
+            return builder.Length > 0 ? builder.ToString().TrimEnd('・') : mappedValue;
         }
 
         private string GetTrainClassMappingValue(Dictionary<string, Dictionary<string, string>> nameMappings, string keyValue)
         {
             string mappedValue = keyValue;
-            string adujestedKeyValue = string.IsNullOrWhiteSpace(keyValue) ? "無印" : keyValue;
-            if (nameMappings.ContainsKey("train") && nameMappings["train"].ContainsKey(adujestedKeyValue))
+
+            //bool isExpress = Regex.IsMatch(keyValue, @"^特[^快]+");
+            //bool isExpress = Regex.IsMatch(keyValue, @"^(特[^快]+|快[^速]+)");
+            var match = Regex.Match(keyValue, @"^((?<expname>特)[^快]+|(?<expname>快)[^速]+|(?<expname>寝特))");
+            var isExpress = match.Groups.Count > 1;
+            int expStringLength = isExpress ? match.Groups["expname"].Value.Length : 0;
+            var keyStrings = isExpress ? new[] { keyValue.Substring(0, expStringLength), keyValue.Substring(expStringLength) } : new[] { keyValue };
+            //var keyStrings = isExpress ? new[] { keyValue.Substring(0, 1), keyValue.Substring(1) } : new[] { keyValue };
+
+            var builder = new StringBuilder();
+            foreach (var keyString in keyStrings)
             {
-                mappedValue = nameMappings["train"][adujestedKeyValue];
+                string adujestedKeyValue = string.IsNullOrWhiteSpace(keyString) ? "無印" : keyString;
+                if (nameMappings.ContainsKey("train") && nameMappings["train"].ContainsKey(adujestedKeyValue))
+                {
+                    mappedValue = nameMappings["train"][adujestedKeyValue];
+                }
+
+                builder.Append(mappedValue);
             }
 
-            return mappedValue;
+            return builder.Length > 0 ? builder.ToString() : mappedValue;
         }
 
         private string GetNotesMappingValue(Dictionary<string, Dictionary<string, string>> nameMappings, string keyValue)
         {
             string mappedValue = keyValue;
-            string adujestedKeyValue = keyValue == "◆" ? "(斜体)◆" : keyValue;
-            if (adujestedKeyValue != null && nameMappings.ContainsKey("mark_etc") && nameMappings["mark_etc"].ContainsKey(adujestedKeyValue))
+
+            // 一文字ずつ分解
+            if(!string.IsNullOrWhiteSpace(keyValue))
             {
-                mappedValue = nameMappings["mark_etc"][adujestedKeyValue];
+                var keyChars = keyValue.ToCharArray();
+                var builder = new StringBuilder();
+                foreach (var keyChar in keyChars)
+                {
+                    string adujestedKeyValue = keyChar == '◆' ? "(斜体)◆" : keyChar.ToString();
+                    if (adujestedKeyValue != null && nameMappings.ContainsKey("mark_etc") && nameMappings["mark_etc"].ContainsKey(adujestedKeyValue))
+                    {
+                        builder.Append(nameMappings["mark_etc"][adujestedKeyValue]).Append(",");
+                    }
+                }
+
+                if (builder.Length > 0)
+                {
+                    mappedValue = builder.ToString().TrimEnd(',');
+                }
             }
 
             return mappedValue;

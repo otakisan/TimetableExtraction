@@ -149,7 +149,7 @@
             this.traceTextBox.Multiline = true;
             this.traceTextBox.Name = "traceTextBox";
             this.traceTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.traceTextBox.Size = new System.Drawing.Size(973, 942);
+            this.traceTextBox.Size = new System.Drawing.Size(1280, 942);
             this.traceTextBox.TabIndex = 8;
             // 
             // JrEastTimetableExtractionControl
@@ -166,7 +166,7 @@
             this.Controls.Add(this.testTargetTextBox);
             this.Controls.Add(this.baseURLLabel);
             this.Name = "JrEastTimetableExtractionControl";
-            this.Size = new System.Drawing.Size(1047, 1088);
+            this.Size = new System.Drawing.Size(1305, 1088);
             ((System.ComponentModel.ISupportInitialize)(this.consecutiveToNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.consecutiveFromNumericUpDown)).EndInit();
             this.ResumeLayout(false);

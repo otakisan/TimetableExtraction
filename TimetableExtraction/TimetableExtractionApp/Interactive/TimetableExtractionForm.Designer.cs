@@ -38,14 +38,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.jrEastTimetableExtractionControl1.Location = new System.Drawing.Point(12, 12);
             this.jrEastTimetableExtractionControl1.Name = "jrEastTimetableExtractionControl1";
-            this.jrEastTimetableExtractionControl1.Size = new System.Drawing.Size(1050, 751);
+            this.jrEastTimetableExtractionControl1.Size = new System.Drawing.Size(1315, 1003);
             this.jrEastTimetableExtractionControl1.TabIndex = 0;
             // 
             // TimetableExtractionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1074, 793);
+            this.ClientSize = new System.Drawing.Size(1575, 1045);
             this.Controls.Add(this.jrEastTimetableExtractionControl1);
             this.Name = "TimetableExtractionForm";
             this.Text = "TimetableExtractionForm";
